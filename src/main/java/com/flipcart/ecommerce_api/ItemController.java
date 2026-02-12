@@ -26,5 +26,23 @@ public class ItemController {
                 .map(item -> new ResponseEntity<>(item, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
-}
 
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Item> updateItem(
+            @PathVariable Long id,
+            @Valid @RequestBody Item item) {
+
+        return itemService.updateItem(id, item)
+                .map(updated -> new ResponseEntity<>(updated, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteItem(@PathVariable Long id) {
+
+        if (itemService.deleteItem(id)) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+}
